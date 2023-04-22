@@ -61,9 +61,6 @@ function remove(userId) {
 
  async function update(userToUpdate) {
      const user = await storageService.put('user', userToUpdate)
-    // let user = getById(_id)
-    // await storageService.put('user', user)
-    // Handle case in which admin updates other user's details
     if (getLoggedinUser()._id === user._id) saveLocalUser(user)
     return user
 }

@@ -1,10 +1,9 @@
-
+export const SPEND_BALANCE = 'SPEND_BALANCE'
+export const GET_USER = 'GET_USER'
+export const UPDATE_USER = 'UPDATE_USER'
 
 const INITIAL_STATE = {
-    loggedInUser: {
-        name: 'Jorji',
-        balance: 100
-    }
+    loggedInUser: null
 }
 
 export function userReducer(state = INITIAL_STATE, action = {}) {
@@ -20,6 +19,11 @@ export function userReducer(state = INITIAL_STATE, action = {}) {
             return{
                 ...state,
                 loggedInUser: action.loggedInUser
+            }
+        case 'UPDATE_USER':
+            return{
+                ...state,
+                loggedInUser: action.updatedUser
             }
 
         default:
