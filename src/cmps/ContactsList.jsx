@@ -1,6 +1,7 @@
 import { ContactsPreview } from './ContactsPreview'
+import React, { memo } from 'react'
 
-export function ContactsList({ contacts, onRemoveContact }) {
+function _ContactsList({ contacts, onRemoveContact }) {
   return (
     <article className="contacts-container">
       {contacts.map((contact) => (
@@ -10,3 +11,4 @@ export function ContactsList({ contacts, onRemoveContact }) {
   )
 }
 
+export const ContactsList = memo(_ContactsList)

@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom'
-import React from 'react'
+import React, { memo } from 'react'
 import { MovesListPreview } from './MoveListPreview'
-export function MovesList({ moves }) {
+
+function _MovesList({ moves }) {
   return (
     <article className="moves-list-container">
       <h3> Your Moves:</h3>
@@ -12,3 +13,5 @@ export function MovesList({ moves }) {
     </article>
   )
 }
+
+export const MovesList = memo(_MovesList)

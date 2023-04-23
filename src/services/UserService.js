@@ -7,7 +7,8 @@ export const UserService = {
     login,
     update,
     getById,
-    getLoggedinUser
+    getLoggedinUser,
+    logout
 }
 
 const STORAGE_KEY_LOGGEDIN_USER = 'loggedinUser'
@@ -79,6 +80,7 @@ function logout() {
     sessionStorage.removeItem(STORAGE_KEY_LOGGEDIN_USER)
     // socketService.logout()
     // return await httpService.post('auth/logout')
+    return null
 }
 
 

@@ -1,5 +1,5 @@
 import { contactService } from "../../services/contact.service"
-import { REMOVE_CONTACT, SET_FILTER_BY, SET_CONTACTS, GET_CONTACT, UPDATE_CONTACT } from "../reducers/contact.reducer"
+import { REMOVE_CONTACT, SET_FILTER_BY, SET_CONTACTS, GET_CONTACT, UPDATE_CONTACT, GET_EMPTY_CONTACT } from "../reducers/contact.reducer"
 
 export function loadContacts() {
     return async (dispatch, getState) => {
@@ -22,6 +22,22 @@ export function loadContact(contactId) {
             const contact = await contactService.getContactById(contactId)
             const action = {
                 type: GET_CONTACT,
+                contact
+            }
+            dispatch(action)
+            return contact
+        } catch (error) {
+            console.log('error:', error)
+        }
+    }
+}
+
+export function getEmptyContact(contactId) {
+    return (dispatch, getState) => {
+        try {
+            const contact = contactService.getEmptyContact()
+            const action = {
+                type: GET_EMPTY_CONTACT,
                 contact
             }
             dispatch(action)

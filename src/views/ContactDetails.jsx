@@ -2,6 +2,7 @@ import { Component, useEffect, useState } from 'react'
 import { contactService } from '../services/contact.service'
 import { TransferFund } from '../cmps/TransferFund'
 import { UserService } from '../services/UserService'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { MovesList } from '../cmps/MovesList'
 import {
   loadContacts,
@@ -19,6 +20,8 @@ export function ContactDetails(props) {
   const contact = useSelector((storeState) => storeState.contactModule.contact)
   const moves = useSelector((storeState) => storeState.userModule.loggedInUser?.moves)
   const [funds, setFunds] = useState('1')
+  const params = useParams()
+  const navigate = useNavigate()
   const dispacth = useDispatch()
   useEffect(() => {
     dispacth(getLoggedInUser())
@@ -26,27 +29,31 @@ export function ContactDetails(props) {
   }, [])
 
   useEffect(() => {
-    dispacth(loadContact(props.match.params.id))
+    dispacth(loadContact(params.id))
     return () => {}
-  }, [props.match.params.id])
+  }, [params.id])
+
+  function formatTime(){
+     const day = new Date().getDate()
+     const month =
+       new Date().getMonth() + 1 > 9 ? new Date().getMonth() + 1 : '0' + (new Date().getMonth() + 1)
+
+     const year = new Date().getFullYear()
+     const hours = new Date().getHours()
+     const minutes =
+       new Date().getMinutes() > 9 ? new Date().getMinutes() : '0' + new Date().getMinutes()
+     const seconds =
+       new Date().getSeconds() > 9 ? new Date().getSeconds() : '0' + new Date().getSeconds()
+
+       return hours + ':' + minutes + ':' + seconds + ' ' + day + '/' + month + '/' + year
+  }
 
   async function transferFunds(ev) {
     ev.preventDefault()
-    const day = new Date().getDate()
-    const month =
-      new Date().getMonth() + 1 > 9
-        ? (new Date().getMonth() + 1)
-        : '0' + (new Date().getMonth() + 1)
-
-    const year = new Date().getFullYear()
-    const hours = new Date().getHours()
-    const minutes =
-      new Date().getMinutes() > 9 ? new Date().getMinutes() : '0' + new Date().getMinutes()
-    const seconds =
-      new Date().getSeconds() > 9 ? new Date().getSeconds() : '0' + new Date().getSeconds()
+    const formattedTime = formatTime()
     const move = {
       name: contact.name,
-      at: hours + ':' + minutes + ':' + seconds + ' ' + day + '/' + month + '/' + year,
+      at: formattedTime,
       amount: +funds,
     }
 
@@ -54,7 +61,6 @@ export function ContactDetails(props) {
     user.coins -= +funds
 
     contact.coins += +funds
-    console.log(contact)
     dispacth(saveCurrContact(contact))
     dispacth(updateUser(user))
   }
@@ -65,7 +71,7 @@ export function ContactDetails(props) {
   }
 
   function onBack() {
-    props.history.push('/contact')
+   navigate('/contact')
   }
 
   if (!contact || !moves) return <div>Please Login...</div>
@@ -74,6 +80,7 @@ export function ContactDetails(props) {
       <button className="details-btn" onClick={onBack}>
         Back
       </button>
+
       <section className="details-card">
         <img src={contact.img} alt="" />
         <h2>{contact.name}</h2>
@@ -92,18 +99,3 @@ export function ContactDetails(props) {
   )
 }
 
-// const mapStateToProps = (state) => ({
-//   contacts: state.contactModule.contacts,
-//   contact: state.contactModule.contact,
-//   filterBy: state.contactModule.filterBy,
-// })
-
-// const mapDispatchToProps = {
-//   loadContacts,
-//   removeContact,
-//   setFilterBy,
-//   loadContact,
-//   saveCurrContact,
-// }
-
-// export const ContactDetails = connect(mapStateToProps, mapDispatchToProps)(_ContactDetails)
