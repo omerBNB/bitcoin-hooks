@@ -1,21 +1,24 @@
-import { Component } from 'react'
+import { Component, useEffect, useState } from 'react'
 import { Charts } from '../cmps/Chrats'
 
 import { BitcoinSerivce } from '../services/BitcoinService'
 
-export class StatisticPage extends Component {
-  state = {
-    dataForMarketPrice: null
-  }
+export function StatisticPage() {
+  const [dataForMarketPrice,setData] = useState(null)
+  
+  useEffect(() => {
+    loadData()
+    return () => {      
+    }
+  }, [])
+  
 
-  async componentDidMount(){
+  async function loadData(){
     const dataForMarketPrice = BitcoinSerivce.getMarketPrice()
-    this.setState({ dataForMarketPrice })
+    setData(dataForMarketPrice)
   }
 
-  render() {
-    const {dataForMarketPrice} = this.state
     if (!dataForMarketPrice) return <div>Loading...</div>
     return <Charts data={dataForMarketPrice} />
   }
-}
+

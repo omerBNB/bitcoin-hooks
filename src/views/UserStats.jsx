@@ -1,21 +1,24 @@
-import { Component } from 'react'
+import { Component, useEffect, useState } from 'react'
 import { UserService } from '../services/UserService'
 import { BitcoinSerivce } from '../services/BitcoinService'
 import { StatisticPage } from './StatisticPage'
 
-export class UserStats extends Component {
-  state = {
-    currUser: null,
-  }
+export function UserStats() {
+  const [currUser, setUser] = useState(null)
 
-  async componentDidMount() {
+  useEffect(() => {
+    loadUser()  
+    return () => {      
+    }
+  }, [])
+  
+
+  async function loadUser() {
     const currUser = await UserService.getUser()
     currUser['btc'] = await BitcoinSerivce.getRate(currUser.coins)
-    this.setState({ currUser })
+    setUser(currUser)
   }
 
-  render() {
-    const { currUser } = this.state
     if (!currUser) return <div>Please Login...</div>
     return (
       <section className="userstats-page-container">
@@ -28,4 +31,4 @@ export class UserStats extends Component {
       </section>
     )
   }
-}
+

@@ -2,6 +2,7 @@
 export const SET_CONTACTS = 'SET_CONTACTS'
 export const ADD_CONTACT = 'ADD_CONTACT'
 export const GET_CONTACT = 'GET_CONTACT'
+export const GET_EMPTY_CONTACT = 'GET_EMPTY_CONTACT'
 export const REMOVE_CONTACT = 'REMOVE_CONTACT'
 export const UPDATE_CONTACT = 'UPDATE_CONTACT'
 export const SET_FILTER_BY = 'SET_FILTER_BY'
@@ -25,6 +26,11 @@ export function contactReducer(state = INITIAL_STATE, action = {}) {
                 contacts: action.contacts
             }
         case GET_CONTACT:
+            return {
+                ...state,
+                contact: action.contact
+            }
+        case GET_EMPTY_CONTACT:
             return {
                 ...state,
                 contact: action.contact

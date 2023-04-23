@@ -1,10 +1,11 @@
 import { logDOM } from '@testing-library/react'
-import { Component, useEffect } from 'react'
+import { Component, useCallback, useEffect } from 'react'
 import { contactService } from '../services/contact.service'
 import { ContactsList } from '../cmps/ContactsList'
 import { FilterBy } from '../cmps/FilterBy'
 import { connect, useDispatch, useSelector } from 'react-redux'
 import { loadContacts, removeContact, setFilterBy } from '../store/actions/contact.actions'
+import { Link } from 'react-router-dom'
 
 
 export function ContactIndex(props) {
@@ -12,9 +13,7 @@ export function ContactIndex(props) {
   const filterBy = useSelector((stoteState) => stoteState.contactModule.filterBy)
   const dispacth = useDispatch()
 
-  // componentDidMount() {
-  //   this.props.loadContacts()
-  // }
+ 
   useEffect(() => {
     dispacth(loadContacts())
   }, [])
@@ -25,18 +24,22 @@ export function ContactIndex(props) {
     dispacth(loadContacts())
   }
  
-  async function onRemoveContact(contactId){
+   const onRemoveContact = useCallback(async (contactId) => {
     try {
       dispacth(removeContact(contactId))
-    } catch (error) {
+    } 
+    catch (error) {
       console.log('error:', error)
     }
-  }
-
+  },[])
+   
     // const { contacts, filterBy } = this.props
     if (!contacts) return <div>Loading...</div>
     return (
-      <section className='main-contact-container'>
+      <section className="main-contact-container">
+        <Link to={"/contact/edit"}>
+        <button className="add-contact-btn">add Contact</button>
+        </Link>
         <FilterBy filterBy={filterBy} onChangeFilter={onChangeFilter} />
         <ContactsList contacts={contacts} onRemoveContact={onRemoveContact} />
       </section>
@@ -44,15 +47,3 @@ export function ContactIndex(props) {
   
 }
 
-// const mapStateToProps = (state) => ({
-//   contacts: state.contactModule.contacts,
-//   filterBy: state.contactModule.filterBy,
-// })
-
-// const mapDispatchToProps = {
-//   loadContacts,
-//   removeContact,
-//   setFilterBy,
-// }
-
-// export const ContactIndex = connect(mapStateToProps, mapDispatchToProps)(_ContactIndex)

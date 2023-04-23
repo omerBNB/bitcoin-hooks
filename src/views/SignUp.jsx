@@ -1,29 +1,28 @@
-import { Component } from 'react'
+import { Component, useState } from 'react'
 import { UserService } from '../services/UserService'
-import { Link, NavLink, withRouter } from 'react-router-dom'
+import { Link, NavLink, useNavigate, withRouter } from 'react-router-dom'
 
-export class SignUp extends Component {
-  state = {
-    username: "",
-  }
+export function SignUp(props) {
+  const [user, setUser] = useState(null)
+  const [userName, setUserName] = useState('')
+  const Navigate = useNavigate()
 
-  signUp = (ev) => {
+
+  function signUp(ev){
     ev.preventDefault()
     const user = UserService.signUp(this.state.username)
-    this.props.history.push('/contact')
+    Navigate('/contact')
   }
 
-  handleChange = ({ target }) => {
+  function handleChange({ target }){
     let value = target.value
-    this.setState(() => ({ username: value  }))
+    setUser(value)
   }
 
-  render() {
     const imgUrl = 'images.png'
-    const { username } = this.state
     return (
       <section className="signup-container">
-        <form action="" className="signup-form" onSubmit={this.signUp}>
+        <form action="" className="signup-form" onSubmit={signUp}>
           <div className="flex">
             <img src={require(`../assets/imgs/${imgUrl}`)} alt="" />
             <h1>Bitcoin</h1>
@@ -34,8 +33,8 @@ export class SignUp extends Component {
           <div className="signup-name-input">
             <label htmlFor="">Please enter your Name:</label>
             <input
-              value={username}
-              onChange={this.handleChange}
+              value={userName}
+              onChange={handleChange}
               type="text"
               name="username"
               id="username"
@@ -46,4 +45,4 @@ export class SignUp extends Component {
       </section>
     )
   }
-}
+
